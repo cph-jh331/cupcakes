@@ -5,7 +5,7 @@
  */
 package servlets;
 
-import backend.DataAccessObject;
+import backend.DataMapper;
 import backend.Search;
 import cake.CakeBottom;
 import cake.CakeTopping;
@@ -15,6 +15,8 @@ import entyties.User;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,6 +24,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import myexceptions.TransactionFailureException;
 
 /**
  *
@@ -33,7 +36,7 @@ import javax.servlet.http.HttpSession;
 })
 public class Controller1 extends HttpServlet {
 
-    DataAccessObject dao = new DataAccessObject();
+    DataMapper dao = new DataMapper();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -155,7 +158,16 @@ public class Controller1 extends HttpServlet {
         {
             if (!cartList.isEmpty())
             {
-                dao.addOrderToDatabase(cartList, user);
+                try
+                {
+                    dao.addOrderToDatabase(cartList, user);
+                } catch (TransactionFailureException ex)
+                {
+                    session.invalidate();
+                    RequestDispatcher rd = request.getRequestDispatcher("index.html");
+                    rd.forward(request, response);
+                    return;
+                }
                 cartList.clear();
                 RequestDispatcher rd = request.getRequestDispatcher("loggedin.jsp");
                 rd.forward(request, response);
