@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class DBConnector {
 
-    private final String ip = "207.154.197.253";
+    private final String ip = "localhost";
     private final int port = 3306;
     private final String database = "cupcakeproject";
     private final String username = "seer";
