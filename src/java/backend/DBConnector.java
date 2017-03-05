@@ -12,6 +12,7 @@ public class DBConnector {
     private final String username = "seer";
     private final String password = "Hest123@hest.dk";
     private Connection conn = null;
+    //test
 
     public Connection connectDB()
     {
