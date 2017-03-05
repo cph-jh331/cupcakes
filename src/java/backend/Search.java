@@ -53,8 +53,7 @@ public class Search {
             {
                 cartList.remove(line);
                 return;
-            }
-            
+            }            
         }
     }
     
